@@ -1,0 +1,26 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="#ffde785a"
+    android:clickable="true"
+    tools:context="com.example.semih.schach.consoleFragment">
+
+    <RelativeLayout
+        android:id="@+id/Console"
+        android:layout_width="fill_parent"
+        android:layout_height="25dp"
+        android:clickable="false">
+
+        <TextView
+            android:id="@+id/log"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:text="Log: "
+            android:textSize="20sp" />
+
+    </RelativeLayout>
+
+</ScrollView>
