@@ -1,7 +1,8 @@
-package com.example.semih.schach;
+package com.example.semih.schach.Main;
 
 import android.app.Activity;
-import android.view.View;
+
+import com.example.semih.schach.Main.DrawView;
 
 /**
  * Created by semih on 07.06.2015.

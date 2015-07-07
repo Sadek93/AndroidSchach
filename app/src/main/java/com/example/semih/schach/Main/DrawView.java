@@ -1,6 +1,5 @@
-package com.example.semih.schach;
+package com.example.semih.schach.Main;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -15,7 +14,8 @@ import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
+
+import com.example.semih.schach.R;
 
 /**
  * Created by semih on 03.06.2015.
@@ -60,13 +60,10 @@ public class DrawView extends View {
         final String TAG = CNAME + MNAME;
         this.canvas = canvas;
 
-        if (ApplicationManager.render) {
-            zeichneSpielfeld();
-            zeichneSpielfiguren(ApplicationManager.schachBrett);
+        zeichneSpielfeld();
+        zeichneSpielfiguren(ApplicationManager.schachBrett);
 
-            ApplicationManager.render = false;
-
-        }
+        ApplicationManager.render = false;
         super.onDraw(canvas);
     }
 
@@ -76,7 +73,6 @@ public class DrawView extends View {
         final String MNAME = "onTouchEvent";
         final String TAG = CNAME + MNAME;
 
-        String temp = "";
         moeglicheZuege = SchachLogik.moeglicheZuege();
         clickX = (int) event.getX();
         clickY = (int) event.getY();
@@ -101,11 +97,11 @@ public class DrawView extends View {
                         SchachLogik.dreheSpielfeld();
 
                         if(ApplicationManager.clientSocket != null){
-                            String zug = SchachLogik.spieleGegnerZug();
+                            String zug = SchachLogik.spieleZugUeberServer();
                             SchachLogik.spieleZug(zug);
                             SchachLogik.dreheSpielfeld();
                         }else{
-                            gegnetZugImThread();
+                            gegnerZugImThread();
                         }
                         break;
                     }
@@ -117,11 +113,11 @@ public class DrawView extends View {
                         SchachLogik.spieleZug(angepassteZuege.substring(i, i + 5));
                         SchachLogik.dreheSpielfeld();
                         if(ApplicationManager.clientSocket != null){
-                            String zug = SchachLogik.spieleGegnerZug();
+                            String zug = SchachLogik.spieleZugUeberServer();
                             SchachLogik.spieleZug(zug);
                             SchachLogik.dreheSpielfeld();
                         }else{
-                            gegnetZugImThread();
+                            gegnerZugImThread();
                         }
                         break;
                     }
@@ -163,7 +159,6 @@ public class DrawView extends View {
             Log.i(TAG, "Figur geklickt: " + Boolean.toString(ApplicationManager.figurGeklickt));
         return super.onTouchEvent(event);
     }
-
 
     private void zeichneSpielfeld() {
         final String MNAME = "zeichneSpielfeld";
@@ -308,13 +303,16 @@ public class DrawView extends View {
         }
     }
 
-    private void gegnetZugImThread(){
+    private void gegnerZugImThread(){
         Runnable r = new Runnable() {
             @Override
             public void run() {
+                ApplicationManager.render = false;
                 String gegnerZug = SchachLogik.alphaBetaSuche(ApplicationManager.suchTiefe, 10000, -10000, "", 0); // TODO: VERBUGGT ? Liefert -52000 als Wert zurück
+                Log.i("ZUG:", gegnerZug);
                 SchachLogik.spieleZug(gegnerZug);
                 SchachLogik.dreheSpielfeld();
+                ApplicationManager.render = true;
             }
         };
 

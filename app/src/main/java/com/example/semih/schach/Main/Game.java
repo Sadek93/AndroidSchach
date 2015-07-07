@@ -1,34 +1,36 @@
-package com.example.semih.schach;
+package com.example.semih.schach.Main;
 
-import android.app.Activity;
-import android.app.Dialog;
-import android.app.Fragment;
-import android.content.Context;
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.widget.ActionMenuView;
 import android.util.Log;
 
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.FrameLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
-import static com.example.semih.schach.R.id.idRelativeLayout;
+import com.example.semih.schach.Util.Client;
+import com.example.semih.schach.Util.ConsoleItem;
+import com.example.semih.schach.R;
+import com.example.semih.schach.Util.ConsoleListAdapter;
+import com.example.semih.schach.Util.NewGameDialog;
+
+import java.util.ArrayList;
 
 public class Game extends FragmentActivity {
 
     private final String CNAME = "Game ";
     private Grafik gfx;
     private DrawView drawView;
-    private RelativeLayout console;
-    public TextView log;
+    private ListView consoleList;
+    private static FragmentManager manager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,19 +40,26 @@ public class Game extends FragmentActivity {
         if (ApplicationManager.DBG_APPLICATION) Log.i(TAG, "entered..");
         setContentView(R.layout.activity_game);
 
-        log = (TextView) findViewById(R.id.log);
-        console = (RelativeLayout) findViewById(R.id.Console);
-        console.setOnClickListener(new View.OnClickListener() {
+        manager = getFragmentManager();
+        consoleList = (ListView) findViewById(R.id.consoleList);
+        ArrayList<ConsoleItem> items = new ArrayList<>();
+        for(int i = 0; i <= 10; i++){
+            ConsoleItem item = new ConsoleItem("Dummy title", "content");
+            items.add(item);
+        }
+        ConsoleListAdapter adapter = new ConsoleListAdapter(this, items);
+        consoleList.setAdapter(adapter);
+        consoleList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-                public void onClick(View v) {
-                if(!ApplicationManager.consoleExpanded) expandConsole();
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (!ApplicationManager.consoleExpanded) expandConsole();
                 else closeConsole();
 
             }
         });
 
-        ViewGroup layout = (ViewGroup) findViewById(idRelativeLayout);
-        drawView = (DrawView)layout.findViewById(R.id.idSchachbrett);
+        RelativeLayout layout = (RelativeLayout) findViewById(R.id.idRelativeLayout);
+        drawView = (DrawView)findViewById(R.id.idSchachbrett);
         gfx = new Grafik(this, drawView);
         if(ApplicationManager.serverComputation) ApplicationManager.clientSocket = new Client("10.0.2.2");
 
@@ -96,7 +105,7 @@ public class Game extends FragmentActivity {
                                     i++;
                                     if(ApplicationManager.DBG_APPLICATION) Log.i(TAG, i + ". Thread: " + Thread.currentThread().toString() + " is running...");
                                     getSpielstatus();
-                                    gfx.render();
+                                    if(ApplicationManager.render) gfx.render();
                                     if(i>= 15) i = 0;
                                 }
 
@@ -116,13 +125,6 @@ public class Game extends FragmentActivity {
     }
 
     public void getSpielstatus(){
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Console.updateConsole(log);
-                Console.updateSmallConsole(log);
-            }
-        });
 
     }
 
@@ -147,15 +149,21 @@ public class Game extends FragmentActivity {
     }
 
     private void expandConsole(){
-        console.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, dpToPx(1080)));
+        consoleList.setLayoutParams(new RelativeLayout.LayoutParams(ListView.LayoutParams.MATCH_PARENT, ListView.LayoutParams.WRAP_CONTENT));
         getSpielstatus();
         ApplicationManager.consoleExpanded = true;
     }
 
     private void closeConsole(){
-        console.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, dpToPx(25)));
+        consoleList.setLayoutParams(new RelativeLayout.LayoutParams(ListView.LayoutParams.MATCH_PARENT, dpToPx(50)));
         getSpielstatus();
         ApplicationManager.consoleExpanded = false;
+    }
+
+    public static void öffneNeuesSpielDialog(){
+            NewGameDialog dialog = new NewGameDialog();
+            dialog.show(manager, "neues spiel");
+
     }
 
 }

@@ -1,6 +1,8 @@
-package com.example.semih.schach;
+package com.example.semih.schach.Main;
 
 import android.util.Log;
+
+import com.example.semih.schach.Util.Client;
 
 /**
  * Created by semih on 06.06.2015.
@@ -12,22 +14,22 @@ public class SchachLogik {
         String list = "";
         for (int i = 0; i < 64; i++) {
             switch (ApplicationManager.schachBrett[i / 8][i % 8]) { // [reihe][spalte]
-                case "B" :
+                case "B":
                     list += moeglichB(i);
                     break;
-                case "T" :
+                case "T":
                     list += moeglichT(i);
                     break;
-                case "S" :
+                case "S":
                     list += moeglichS(i);
                     break;
-                case "L" :
+                case "L":
                     list += moeglichL(i);
                     break;
-                case "D" :
+                case "D":
                     list += moeglichD(i);
                     break;
-                case "K" :
+                case "K":
                     list += moeglichK(i);
                     break;
             }
@@ -324,7 +326,8 @@ public class SchachLogik {
                         ApplicationManager.schachBrett[r][c] = "S";
                         ApplicationManager.schachBrett[r + j][c + k * 2] = alterStein;
                     }
-                } catch (Exception e) {}
+                } catch (Exception e) {
+                }
 
                 // Checkt die 4 Bewegungen des Springer in denen er vertikal 2 Felder springt.
                 try {
@@ -338,7 +341,8 @@ public class SchachLogik {
                         ApplicationManager.schachBrett[r][c] = "S";
                         ApplicationManager.schachBrett[r + j * 2][c + k] = alterStein;
                     }
-                } catch (Exception e) {}
+                } catch (Exception e) {
+                }
             }
         }
 
@@ -417,7 +421,8 @@ public class SchachLogik {
                             ApplicationManager.schachBrett[r][c] = "D";
                             ApplicationManager.schachBrett[r + temp * j][c + temp * k] = alterStein;
                         }
-                    } catch (Exception e) {}
+                    } catch (Exception e) {
+                    }
                     temp = 1; // temp wird auf 1 gesetzt um bei dem nächsten for- Schleifen durchlauf keine Felder zu überspringen
                 }
             }
@@ -446,7 +451,8 @@ public class SchachLogik {
                         ApplicationManager.schachBrett[r - 1 + j / 3][c - 1 + j % 3] = alterStein;
                         ApplicationManager.positionKoenigGross = kingTemp;
                     }
-                } catch (Exception e) {}
+                } catch (Exception e) {
+                }
             }
         }
 
@@ -455,7 +461,6 @@ public class SchachLogik {
 
     public static String alphaBetaSuche(int tiefe, int beta, int alpha, String move, int player) {
         // returned ein String in der Form von x1,y1,x2,y2,score
-        Console.setSmallConsoleMessage("Gegner denkt nach...");
         String liste = moeglicheZuege();
         if (tiefe == 0 || liste.length() == 0) {
             return move + (Bewertung.bewerte(liste.length(), tiefe) * (player * 2 - 1));
@@ -483,7 +488,6 @@ public class SchachLogik {
                         move = returnString.substring(0, 5);
                     }
                 }
-
             }
             if (alpha >= beta) {
                 if (player == 0) {
@@ -523,6 +527,7 @@ public class SchachLogik {
     }
 
     public static void spieleZug(String move) {
+
         if (move.charAt(4) != 'B') {
             // Normaler Spielzug in Form von: x1,y1,x2,y2,eroberter Spielstein
             ApplicationManager.schachBrett[Character.getNumericValue(move.charAt(2))][Character.getNumericValue(move.charAt(3))] =
@@ -568,12 +573,11 @@ public class SchachLogik {
         for (int i = 0; i < liste.length() / 5; i += 5) {
             spieleZug(liste.substring(i, i + 5));
             punkte[i / 5] = -Bewertung.bewerte(-1, 0);
-
             spieleZugRueckgaengig(liste.substring(i, i + 5));
         }
 
         String neueListeA = "";
-        String neueListeB = "";
+        String neueListeB = liste;
 
         for (int i = 0; i < Math.min(6, liste.length() / 5); i++) {
             int max = -1000000, maxLocation = 0;
@@ -591,7 +595,7 @@ public class SchachLogik {
         return neueListeA + neueListeB;
     }
 
-    public static String spieleGegnerZug(){
+    public static String spieleZugUeberServer() {
         String move = "";
         Client.sendeDaten(ApplicationManager.clientSocket.output);
         move = Client.empfangeDaten(ApplicationManager.clientSocket.input);

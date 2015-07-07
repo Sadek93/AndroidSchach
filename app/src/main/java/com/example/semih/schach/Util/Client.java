@@ -1,8 +1,9 @@
-package com.example.semih.schach;
+package com.example.semih.schach.Util;
 
 import android.util.Log;
 
-import java.io.BufferedReader;
+import com.example.semih.schach.Main.ApplicationManager;
+
 import java.io.EOFException;
 import java.io.IOException;
 

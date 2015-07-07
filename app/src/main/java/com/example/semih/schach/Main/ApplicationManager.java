@@ -1,9 +1,8 @@
-package com.example.semih.schach;
+package com.example.semih.schach.Main;
 
 import android.app.Application;
-import android.app.Dialog;
-import android.content.Context;
-import android.widget.Button;
+
+import com.example.semih.schach.Util.Client;
 
 /**
  * Created by semih on 02.06.2015.
@@ -32,13 +31,13 @@ public class ApplicationManager extends Application{
     // Großbuchstaben = Weiß;   Kleinbuchstaben = Schwarz
     // B = Bauer;   T = Turm;   S = Springer;   L = Läufer;     D = Königin;    K = König
     public static String schachBrett[][]	= {
-            {"t", "s", "l", "d", "k", "l", "s", "t"},
-            {"b", "b", "b", "b", "b", "b", "b", "b"},
-            {" ", " ", " ", " ", " ", " ", " ", " "},
-            {" ", " ", " ", " ", " ", " ", " ", " "},
-            {" ", " ", " ", " ", " ", " ", " ", " "},
-            {" ", " ", " ", " ", " ", " ", " ", " "},
-            {"B", "B", "B", "B", "B", "B", "B", "B"},
-            {"T", "S", "L", "D", "K", "L", "S", "T"},};
+            { "t", "s", "l", "d", "k", "l", "s", "t" },
+            { "b", "b", "b", "b", "b", "b", "b", "b" },
+            { " ", " ", " ", " ", " ", " ", " ", " " },
+            { " ", " ", " ", " ", " ", " ", " ", " " },
+            { " ", " ", " ", " ", " ", " ", " ", " " },
+            { " ", " ", " ", " ", " ", " ", " ", " " },
+            { "B", "B", "B", "B", "B", "B", "B", "B" },
+            { "T", "S", "L", "D", "K", "L", "S", "T" }, };
 
 }

@@ -1,4 +1,7 @@
-package com.example.semih.schach;
+package com.example.semih.schach.Main;
+
+import com.example.semih.schach.Main.ApplicationManager;
+import com.example.semih.schach.Main.SchachLogik;
 
 /**
  * Created by semih on 04.06.2015.
@@ -191,22 +194,22 @@ public class Bewertung {
         for (int i = 0; i < 64; i++) {
 
             switch (ApplicationManager.schachBrett[i / 8][i % 8]) { // [row][column]
-                case "P" :
+                case "B" :
                     counter += bauernSpielfeld[i / 8][i % 8];
                     break;
-                case "R" :
+                case "T" :
                     counter += turmSpielfeld[i / 8][i % 8];
                     break;
-                case "K" :
+                case "S" :
                     counter += springerSpielfeld[i / 8][i % 8];
                     break;
-                case "B" :
+                case "L" :
                     counter += laeuferSpielfeld[i / 8][i % 8];
                     break;
-                case "Q" :
+                case "D" :
                     counter += dameSpielfeld[i / 8][i % 8];
                     break;
-                case "A" :
+                case "K" :
                     if (material >= 1750) {
                         counter += koenigSpielfeld[i / 8][i % 8];
                         counter += SchachLogik.moeglichK(ApplicationManager.positionKoenigGross).length() * 10;

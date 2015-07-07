@@ -1,11 +1,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.semih.schach.Game"
+    tools:context="com.example.semih.schach.Main.Game"
     android:background="#B56249"
     android:id="@+id/idRelativeLayout">
 
-    <com.example.semih.schach.DrawView
+    <com.example.semih.schach.Main.DrawView
         android:layout_width="384dp"
         android:layout_height="384dp"
         android:id="@+id/idSchachbrett"
@@ -31,7 +31,7 @@
 
         <fragment
             android:id="@+id/consoleFragment"
-            android:name="com.example.semih.schach.consoleFragment"
+            android:name="com.example.semih.schach.Util.consoleFragment"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
